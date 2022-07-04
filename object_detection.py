@@ -4,46 +4,24 @@ import imutils
 import os
 import numpy as np
 import paho.mqtt.client as paho
-
+from config import Config
 #from imutils.video import FPS
 #from imutils.video import VideoStream
 
-# MQTT connection
-MQTT_HOST = os.environ.get('MQTT_HOST', None)     # 192.168.1.225'
-MQTT_PORT = int(os.environ.get('MQTT_PORT', 1883))           # 1883
-MQTT_CLIENT_ID = os.environ.get('MQTT_CLIENT_ID', 'obj-detection-python' )
-MQTT_USER = os.environ.get('MQTT_USER', '')
-MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD','')
 
-# the base mqtt topic
-MQTT_TOPIC = os.environ.get('MQTT_TOPIC','home/object-detected/')
-
-# The stream we are detecting objects in
-STREAM_URL = os.environ.get('STREAM_URL',None)
-
-# simple throttle
-# for each object detected only send MQTT message once every 30 seconds
-THROTTLE_TIME = int(os.environ.get('THROTTLE_TIME', 30))
-
-# Ignore detections with a confidence level lower than this, must be between 0-1
-MIN_CONFIDENCE = float(os.environ.get('MIN_CONFIDENCE', .40))
-
-FILE_PROTOTXT = "SSD_MobileNet_prototxt.txt"
-FILE_MODEL = "SSD_MobileNet.caffemodel"
-
-client = paho.Client(MQTT_CLIENT_ID)
-client.username_pw_set(MQTT_USER, MQTT_PASSWORD)
-client.connect(MQTT_HOST, MQTT_PORT)
+client = paho.Client(Config.MQTT_CLIENT_ID)
+client.username_pw_set(Config.MQTT_USER, Config.MQTT_PASSWORD)
+client.connect(Config.MQTT_HOST, Config.MQTT_PORT)
 # call loop_start for auto reconnections
 client.loop_start()
 
 detected_objects = {}
 
-if not MQTT_HOST:
+if not Config.MQTT_HOST:
 	sys.exit('Please set the MQTT_HOST enviroment variable')
-if not STREAM_URL:
+if not Config.STREAM_URL:
 	sys.exit('Please set the STREAM_URL enviroment variable')
-if MIN_CONFIDENCE > 1 or MIN_CONFIDENCE < 0:
+if Config.MIN_CONFIDENCE > 1 or MIN_CONFIDENCE < 0:
 	sys.exit('Enviroment variable MIN_CONFIDENCE must be between 0 and 1')
 	
 # Check throttling of the MQTT output for an object
@@ -54,7 +32,7 @@ def throttle_output(object_label, obj_detection_time):
         # check if time since last detection
         # if less than THROTTLE_TIME, return true, we are throttling
         # if greater than THROTTLE_TIME, return false, we are not throttling
-        if obj_detection_time - detected_objects[object_label] < THROTTLE_TIME:
+        if obj_detection_time - detected_objects[object_label] < Config.THROTTLE_TIME:
             return True
         else:
             detected_objects[object_label] = obj_detection_time
@@ -74,10 +52,10 @@ if __name__ == "__main__":
 	"sheep","sofa", "train", "tvmonitor"]
 
 	#Loading Caffe Model
-	nn = cv2.dnn.readNetFromCaffe(FILE_PROTOTXT, FILE_MODEL)
+	nn = cv2.dnn.readNetFromCaffe(Config.FILE_PROTOTXT, Config.FILE_MODEL)
 
 	#Initialize Video Stream
-	vs = cv2.VideoCapture(STREAM_URL)
+	vs = cv2.VideoCapture(Config.STREAM_URL)
 	
 	# sleeping might reset connection on camera
 	print("Waiting 60 seconds to start ...",flush=True)
@@ -117,13 +95,13 @@ if __name__ == "__main__":
 
 				#Filtering out weak predictions
 				#if confidence > MIN_CONFIDENCE and idx == 15:
-				if confidence > MIN_CONFIDENCE and not throttle_output(label, time.time()):
+				if confidence > Config.MIN_CONFIDENCE and not throttle_output(label, time.time()):
 
 						# build json string
 						json_string = '{ "object":"' + label + '", "idx":"' + str(idx) + '","confidence":"' + str(confidence) + '","time":"' + str(detected_objects[label]) + '"}'
 
 						# Build the MQTT topic
-						topic = MQTT_TOPIC + '/' + label
+						topic = Config.MQTT_TOPIC + '/' + label
 
 						# Publish the MQTT msg
 						client.publish( topic, json_string )
