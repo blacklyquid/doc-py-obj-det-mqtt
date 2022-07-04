@@ -10,7 +10,7 @@ import paho.mqtt.client as paho
 
 # MQTT connection
 MQTT_HOST = os.environ.get('MQTT_HOST', None)     # 192.168.1.225'
-MQTT_PORT = os.environ.get('MQTT_PORT', 1883)           # 1883
+MQTT_PORT = int(os.environ.get('MQTT_PORT', 1883))           # 1883
 MQTT_CLIENT_ID = os.environ.get('MQTT_CLIENT_ID', 'obj-detection-python' )
 MQTT_USER = os.environ.get('MQTT_USER', '')
 MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD','')
@@ -23,7 +23,7 @@ STREAM_URL = os.environ.get('STREAM_URL',None)
 
 # simple throttle
 # for each object detected only send MQTT message once every 30 seconds
-THROTTLE_TIME = os.environ.get('THROTTLE_TIME', 30)
+THROTTLE_TIME = int(os.environ.get('THROTTLE_TIME', 30))
 
 # Ignore detections with a confidence level lower than this, must be between 0-1
 MIN_CONFIDENCE = float(os.environ.get('MIN_CONFIDENCE', .40))
@@ -54,15 +54,15 @@ def throttle_output(object_label, obj_detection_time):
         # check if time since last detection
         # if less than THROTTLE_TIME, return true, we are throttling
         # if greater than THROTTLE_TIME, return false, we are not throttling
-        if time.time() - detected_objects[object_label] < THROTTLE_TIME:
+        if obj_detection_time - detected_objects[object_label] < THROTTLE_TIME:
             return True
         else:
-            detected_objects[object_label] = time.time()
+            detected_objects[object_label] = obj_detection_time
             return False
     else:
         # set time in dictionary for this object
         # return false meaning we are not throttling for this object
-        detected_objects[object_label] = time.time()
+        detected_objects[object_label] = obj_detection_time
         return False
 
 if __name__ == "__main__":
