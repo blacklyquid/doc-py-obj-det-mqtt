@@ -44,6 +44,7 @@ def throttle_output(object_label, obj_detection_time):
         # return false meaning we are not throttling for this object
         detected_objects[object_label] = obj_detection_time
         return False
+
 class detected_object:
 	labels = ["background", "aeroplane", "bicycle", "bird", 
 	"boat","bottle", "bus", "car", "cat", "chair", "cow", 
@@ -53,11 +54,19 @@ class detected_object:
 		self.confidence = detected_confidence
 		self.label = self.labels[label_index]
 		self.detection_time = time.time()
-		
-def detected_object_list( nn_detections ):
+		self.label_index = label_index
+		self.json_string = '{ "object":"' + self.label + '", "idx":"' + str(self.label_index) + '","confidence":"' + str(self.confidence) + '","time":"' + str(self.detection_time) + '"}'
+		self.mqtt_topic = Config.MQTT_TOPIC + '/' + self.label
+	def getJSON():
+		return self.json_string
+	def getTopic():
+		return self.mqtt_topic
+
+def get_detected_object_list( nn_detections ):
 	dol = []
 	for i in np.arange(0, nn_detections.shape[2]):
-		dol.append(detected_object( detections[0, 0, i, 2], int(detections[0, 0, i, 1]))
+		if detections[0, 0, i, 2] > Config.MIN_CONFIDENCE:
+			dol.append(detected_object( detections[0, 0, i, 2], int(detections[0, 0, i, 1]))
 	
 	return dol
 	
@@ -79,10 +88,7 @@ if __name__ == "__main__":
 	print("Waiting 60 seconds to start ...",flush=True)
 	time.sleep(60.0)
 	print("Begining...",flush=True)
-	
-	
-	
-	
+
 	#Loop Video Stream
 	while True:
 		# Read frame and resize to 400px
@@ -96,35 +102,19 @@ if __name__ == "__main__":
 
 			#Passing Blob through network to detect and predict
 			nn.setInput(blob)
-			detections = nn.forward()
+			detections = get_detected_object_list( nn.forward() )
 
 
 			#Loop over the detections
-			for i in np.arange(0, detections.shape[2]):
-
-				#Extracting the confidence of predictions
-				confidence = detections[0, 0, i, 2]
-
-				#object label id
-				idx = int(detections[0, 0, i, 1])
-
-				# the object label
-				label = labels[idx]
+			for detection in detections:
 
 				#Filtering out weak predictions
 				#if confidence > MIN_CONFIDENCE and idx == 15:
-				if confidence > Config.MIN_CONFIDENCE and not throttle_output(label, time.time()):
-
-						# build json string
-						json_string = '{ "object":"' + label + '", "idx":"' + str(idx) + '","confidence":"' + str(confidence) + '","time":"' + str(detected_objects[label]) + '"}'
-
-						# Build the MQTT topic
-						topic = Config.MQTT_TOPIC + '/' + label
+				if not throttle_output(detection.label, detection.detection_time):
 
 						# Publish the MQTT msg
-						client.publish( topic, json_string )
-
-						print(json_string, flush=True)
+						client.publish( detection.getTopic(), detection.getJSON() )
+						print(detection.getJSON(), flush=True)
 
 
 
