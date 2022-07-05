@@ -65,7 +65,7 @@ class detected_object:
 def get_detected_object_list( nn_detections ):
 	dol = []
 	for i in np.arange(0, nn_detections.shape[2]):
-		if detections[0, 0, i, 2] > Config.MIN_CONFIDENCE:
+		if nn_detections[0, 0, i, 2] > Config.MIN_CONFIDENCE:
 			dol.append(detected_object( nn_detections[0, 0, i, 2], int(nn_detections[0, 0, i, 1])))
 	
 	return dol
