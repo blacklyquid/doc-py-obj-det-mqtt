@@ -23,7 +23,14 @@ if not Config.STREAM_URL:
 	sys.exit('Please set the STREAM_URL enviroment variable')
 if Config.MIN_CONFIDENCE > 1 or Config.MIN_CONFIDENCE < 0:
 	sys.exit('Enviroment variable MIN_CONFIDENCE must be between 0 and 1')
+
 	
+class detected_object:
+	labels = ["background", "aeroplane", "bicycle", "bird", 
+	"boat","bottle", "bus", "car", "cat", "chair", "cow", 
+	"diningtable","dog", "horse", "motorbike", "person", "pottedplant", 
+	"sheep","sofa", "train", "tvmonitor"]
+	def __init__(self, 
 # Check throttling of the MQTT output for an object
 # obj - String - the detected object label
 # obj_detection_time - time in seconds when the object was detected
