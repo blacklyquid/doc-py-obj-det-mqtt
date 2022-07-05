@@ -57,9 +57,9 @@ class detected_object:
 		self.label_index = label_index
 		self.json_string = '{ "object":"' + self.label + '", "idx":"' + str(self.label_index) + '","confidence":"' + str(self.confidence) + '","time":"' + str(self.detection_time) + '"}'
 		self.mqtt_topic = Config.MQTT_TOPIC + '/' + self.label
-	def getJSON():
+	def getJSON(self):
 		return self.json_string
-	def getTopic():
+	def getTopic(self):
 		return self.mqtt_topic
 
 def get_detected_object_list( nn_detections ):
