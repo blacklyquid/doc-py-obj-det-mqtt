@@ -4,7 +4,7 @@ import imutils
 import os
 import numpy as np
 import paho.mqtt.client as paho
-from config import Config
+import config
 #from imutils.video import FPS
 #from imutils.video import VideoStream
 
