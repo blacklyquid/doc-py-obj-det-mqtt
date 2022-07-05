@@ -21,7 +21,7 @@ if not Config.MQTT_HOST:
 	sys.exit('Please set the MQTT_HOST enviroment variable')
 if not Config.STREAM_URL:
 	sys.exit('Please set the STREAM_URL enviroment variable')
-if Config.MIN_CONFIDENCE > 1 or MIN_CONFIDENCE < 0:
+if Config.MIN_CONFIDENCE > 1 or Config.MIN_CONFIDENCE < 0:
 	sys.exit('Enviroment variable MIN_CONFIDENCE must be between 0 and 1')
 	
 # Check throttling of the MQTT output for an object
