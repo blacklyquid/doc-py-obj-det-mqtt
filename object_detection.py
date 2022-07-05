@@ -1,10 +1,12 @@
 import cv2
 import time
 import imutils
-import os
+#import os
 import numpy as np
 import paho.mqtt.client as paho
+# import configuration
 from config import Config
+
 #from imutils.video import FPS
 #from imutils.video import VideoStream
 
