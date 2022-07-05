@@ -1,3 +1,7 @@
+# config.py
+
+import os
+
 class config:
   # MQTT connection
   MQTT_HOST = os.environ.get('MQTT_HOST', None)     # 192.168.1.225'
