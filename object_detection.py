@@ -25,12 +25,7 @@ if Config.MIN_CONFIDENCE > 1 or Config.MIN_CONFIDENCE < 0:
 	sys.exit('Enviroment variable MIN_CONFIDENCE must be between 0 and 1')
 
 	
-class detected_object:
-	labels = ["background", "aeroplane", "bicycle", "bird", 
-	"boat","bottle", "bus", "car", "cat", "chair", "cow", 
-	"diningtable","dog", "horse", "motorbike", "person", "pottedplant", 
-	"sheep","sofa", "train", "tvmonitor"]
-	def __init__(self, 
+
 # Check throttling of the MQTT output for an object
 # obj - String - the detected object label
 # obj_detection_time - time in seconds when the object was detected
@@ -49,7 +44,23 @@ def throttle_output(object_label, obj_detection_time):
         # return false meaning we are not throttling for this object
         detected_objects[object_label] = obj_detection_time
         return False
-
+class detected_object:
+	labels = ["background", "aeroplane", "bicycle", "bird", 
+	"boat","bottle", "bus", "car", "cat", "chair", "cow", 
+	"diningtable","dog", "horse", "motorbike", "person", "pottedplant", 
+	"sheep","sofa", "train", "tvmonitor"]
+	def __init__(self, detected_confidence, label_index):
+		self.confidence = detected_confidence
+		self.label = self.labels[label_index]
+		self.detection_time = time.time()
+		
+def detected_object_list( nn_detections ):
+	dol = []
+	for i in np.arange(0, nn_detections.shape[2]):
+		dol.append(detected_object( detections[0, 0, i, 2], int(detections[0, 0, i, 1]))
+	
+	return dol
+	
 if __name__ == "__main__":
 
 	#Initialize Objects and corresponding colors which the model can detect
