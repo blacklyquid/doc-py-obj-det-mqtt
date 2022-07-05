@@ -1,7 +1,6 @@
 import cv2
 import time
 import imutils
-#import os
 import numpy as np
 import paho.mqtt.client as paho
 # import configuration
@@ -9,7 +8,6 @@ from config import Config
 
 #from imutils.video import FPS
 #from imutils.video import VideoStream
-
 
 client = paho.Client(Config.MQTT_CLIENT_ID)
 client.username_pw_set(Config.MQTT_USER, Config.MQTT_PASSWORD)
