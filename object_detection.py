@@ -7,9 +7,6 @@ import numpy as np
 from config import Config
 from paho_mqtt import *
 
-
-
-
 # Check throttling of the MQTT output for an object
 # detected object list with label->time accociation
 detected_objects = {}
