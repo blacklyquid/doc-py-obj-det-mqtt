@@ -15,11 +15,6 @@ client.connect(Config.MQTT_HOST, Config.MQTT_PORT)
 # call loop_start for auto reconnections
 client.loop_start()
 
-
-
-
-	
-
 # Check throttling of the MQTT output for an object
 # detected object list with label->time accociation
 detected_objects = {}
