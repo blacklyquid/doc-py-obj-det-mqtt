@@ -10,6 +10,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY object_detection.py ./
 COPY config.py ./
+COPY paho_mqtt.py ./
 COPY SSD_MobileNet.caffemodel ./
 COPY SSD_MobileNet_prototxt.txt ./
 
