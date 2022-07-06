@@ -29,12 +29,12 @@ if Config.MIN_CONFIDENCE > 1 or Config.MIN_CONFIDENCE < 0:
 # Check throttling of the MQTT output for an object
 # detected object list with label->time accociation
 detected_objects = {}
-def throttle_output(object_label, obj_detection_time):
+def throttle_output(object_label, obj_detection_time, throttle_time):
     if object_label in detected_objects:
         # check if time since last detection
         # if less than THROTTLE_TIME, return true, we are throttling
         # if greater than THROTTLE_TIME, return false, we are not throttling
-        if obj_detection_time - detected_objects[object_label] < Config.THROTTLE_TIME:
+        if obj_detection_time - detected_objects[object_label] < throttle_time:
             return True
         else:
             detected_objects[object_label] = obj_detection_time
@@ -102,11 +102,11 @@ if __name__ == "__main__":
 			
 			#Loop over the detections
 			for detection in detections:
-				print(detection,flush=True)
+				
 				#Filtering out weak predictions
 				#if confidence > MIN_CONFIDENCE and idx == 15:
-				if not throttle_output(detection.label, detection.timestamp):
-						
+				if not throttle_output(detection.label, detection.timestamp, Config.THROTTLE_TIME):
+					print(detection,flush=True)
 					# Publish the MQTT msg
 					client.publish( Config.MQTT_TOPIC + "/" + detection.label, str(detection) )
 					print(detection, flush=True)
