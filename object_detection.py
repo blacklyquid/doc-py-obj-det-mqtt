@@ -2,20 +2,13 @@ import cv2
 import time
 import imutils
 import numpy as np
-import paho.mqtt.client as paho
+
 # import configuration
 from config import Config
+import paho_mqtt
 
-class paho_mqtt:
-	def __init__( self, client_id, user, password, host, port ):
-		self.client = paho.Client( client_id )
-		self.client.username_pw_set( user, password )
-		self.client.connect( host, port )
-		self.client.loop_start()
-	def publish( self, topic, msg ):
-		self.client.publish( topci, msg )
 
-mqtt = paho_mqtt( Config.MQTT_CLIENT_ID, Config.MQTT_USER, Config.MQTT_PASSWORD, Config.MQTT_HOST, Config.MQTT_PORT)
+
 
 # Check throttling of the MQTT output for an object
 # detected object list with label->time accociation
@@ -78,7 +71,8 @@ class stream_capture:
 		self.stream.release()
 
 if __name__ == "__main__":
-
+	
+	mqtt = paho_mqtt( Config.MQTT_CLIENT_ID, Config.MQTT_USER, Config.MQTT_PASSWORD, Config.MQTT_HOST, Config.MQTT_PORT)
 	#Loading Caffe Model
 	nn = cv2.dnn.readNetFromCaffe(Config.FILE_PROTOTXT, Config.FILE_MODEL)
 
