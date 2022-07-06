@@ -5,7 +5,7 @@ import numpy as np
 
 # import configuration
 from config import Config
-import paho_mqtt
+from paho_mqtt import *
 
 
 
