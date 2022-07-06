@@ -6,14 +6,16 @@ import paho.mqtt.client as paho
 # import configuration
 from config import Config
 
-#from imutils.video import FPS
-#from imutils.video import VideoStream
+class paho_mqtt:
+	def __init__( self, client_id, user, password, host, port ):
+		self.client = paho.Client( client_id )
+		self.client.username_pw_set( user, password )
+		self.client.connect( host, port )
+		self.client.loop_start()
+	def publish( self, topic, msg ):
+		self.client.publish( topci, msg )
 
-client = paho.Client(Config.MQTT_CLIENT_ID)
-client.username_pw_set(Config.MQTT_USER, Config.MQTT_PASSWORD)
-client.connect(Config.MQTT_HOST, Config.MQTT_PORT)
-# call loop_start for auto reconnections
-client.loop_start()
+mqtt = paho_mqtt( Config.MQTT_CLIENT_ID, Config.MQTT_USER, Config.MQTT_PASSWORD, Config.MQTT_HOST, Config.MQTT_PORT)
 
 # Check throttling of the MQTT output for an object
 # detected object list with label->time accociation
@@ -102,6 +104,6 @@ if __name__ == "__main__":
 			#if confidence > MIN_CONFIDENCE and idx == 15:
 			if not throttle_output(detection.label, detection.timestamp, Config.THROTTLE_TIME):
 				# Publish the MQTT msg
-				client.publish( Config.MQTT_TOPIC + "/" + detection.label, str(detection) )
+				mqtt.publish( Config.MQTT_TOPIC + "/" + detection.label, str(detection) )
 				print(detection, flush=True)
 		del detections
