@@ -57,7 +57,7 @@ class detected_object:
 		self.label_index = label_index
 		self.json_string = '{ "object":"' + self.label + '", "idx":"' + str(self.label_index) + '","confidence":"' + str(self.confidence) + '","time":"' + str(self.detection_time) + '"}'
 		self.mqtt_topic = Config.MQTT_TOPIC + '/' + self.label
-	def getJSON(self):
+	def __str__(self):
 		return self.json_string
 	def getTopic(self):
 		return self.mqtt_topic
@@ -104,7 +104,7 @@ if __name__ == "__main__":
 			nn.setInput(blob)
 			detections = get_detected_object_list( nn.forward() )
 
-
+			print(detection,flush=True)
 			#Loop over the detections
 			for detection in detections:
 				print(detection.label,flush=True)
@@ -113,8 +113,8 @@ if __name__ == "__main__":
 				if not throttle_output(detection.label, detection.detection_time):
 						
 						# Publish the MQTT msg
-						client.publish( detection.getTopic(), detection.getJSON() )
-						print(detection.getJSON(), flush=True)
+						client.publish( detection.getTopic(), str(detection) )
+						print(detection, flush=True)
 
 
 
