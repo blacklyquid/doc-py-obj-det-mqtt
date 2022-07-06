@@ -7,4 +7,4 @@ class paho_mqtt:
 		self.client.connect( host, port )
 		self.client.loop_start()
 	def publish( self, topic, msg ):
-		self.client.publish( topci, msg )
+		self.client.publish( topic, msg )
