@@ -107,11 +107,11 @@ if __name__ == "__main__":
 
 			#Loop over the detections
 			for detection in detections:
-				print(detection,flush=True)
+				print(detection.label,flush=True)
 				#Filtering out weak predictions
 				#if confidence > MIN_CONFIDENCE and idx == 15:
 				if not throttle_output(detection.label, detection.detection_time):
-
+						
 						# Publish the MQTT msg
 						client.publish( detection.getTopic(), detection.getJSON() )
 						print(detection.getJSON(), flush=True)
