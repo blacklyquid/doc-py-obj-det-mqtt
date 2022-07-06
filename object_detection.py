@@ -106,7 +106,6 @@ if __name__ == "__main__":
 				#Filtering out weak predictions
 				#if confidence > MIN_CONFIDENCE and idx == 15:
 				if not throttle_output(detection.label, detection.timestamp, Config.THROTTLE_TIME):
-					print(detection,flush=True)
 					# Publish the MQTT msg
 					client.publish( Config.MQTT_TOPIC + "/" + detection.label, str(detection) )
 					print(detection, flush=True)
