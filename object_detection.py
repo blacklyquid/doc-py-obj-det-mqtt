@@ -104,10 +104,10 @@ if __name__ == "__main__":
 			nn.setInput(blob)
 			detections = get_detected_object_list( nn.forward() )
 
-			print(detection,flush=True)
+			
 			#Loop over the detections
 			for detection in detections:
-				print(detection.label,flush=True)
+				print(detection,flush=True)
 				#Filtering out weak predictions
 				#if confidence > MIN_CONFIDENCE and idx == 15:
 				if not throttle_output(detection.label, detection.detection_time):
