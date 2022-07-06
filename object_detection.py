@@ -15,7 +15,7 @@ client.connect(Config.MQTT_HOST, Config.MQTT_PORT)
 # call loop_start for auto reconnections
 client.loop_start()
 
-detected_objects = {}
+
 
 if not Config.MQTT_HOST:
 	sys.exit('Please set the MQTT_HOST enviroment variable')
@@ -27,8 +27,8 @@ if Config.MIN_CONFIDENCE > 1 or Config.MIN_CONFIDENCE < 0:
 	
 
 # Check throttling of the MQTT output for an object
-# obj - String - the detected object label
-# obj_detection_time - time in seconds when the object was detected
+# detected object list with label->time accociation
+detected_objects = {}
 def throttle_output(object_label, obj_detection_time):
     if object_label in detected_objects:
         # check if time since last detection
@@ -53,30 +53,25 @@ class detected_object:
 	def __init__(self, detected_confidence, label_index):
 		self.confidence = detected_confidence
 		self.label = self.labels[label_index]
-		self.detection_time = time.time()
+		self.timestamp = time.time()
 		self.label_index = label_index
-		self.json_string = '{ "object":"' + self.label + '", "idx":"' + str(self.label_index) + '","confidence":"' + str(self.confidence) + '","time":"' + str(self.detection_time) + '"}'
-		self.mqtt_topic = Config.MQTT_TOPIC + '/' + self.label
+		self.json_string = '{ "object":"' + self.label + '", "idx":"' + str(self.label_index) + '","confidence":"' + str(self.confidence) + '","time":"' + str(self.timestamp) + '"}'
 	def __str__(self):
 		return self.json_string
-	def getTopic(self):
-		return self.mqtt_topic
 
-def get_detected_object_list( nn_detections ):
+
+# return list of detected objects from cv2 network
+# return only objects with confidence levels above the min
+def get_detected_object_list( nn_detections, min_confidence_level ):
+	# detected object list to return
 	dol = []
 	for i in np.arange(0, nn_detections.shape[2]):
-		if nn_detections[0, 0, i, 2] > Config.MIN_CONFIDENCE:
+		if nn_detections[0, 0, i, 2] > min_confidence_level:
 			dol.append(detected_object( nn_detections[0, 0, i, 2], int(nn_detections[0, 0, i, 1])))
 	
 	return dol
 	
 if __name__ == "__main__":
-
-	#Initialize Objects and corresponding colors which the model can detect
-	labels = ["background", "aeroplane", "bicycle", "bird", 
-	"boat","bottle", "bus", "car", "cat", "chair", "cow", 
-	"diningtable","dog", "horse", "motorbike", "person", "pottedplant", 
-	"sheep","sofa", "train", "tvmonitor"]
 
 	#Loading Caffe Model
 	nn = cv2.dnn.readNetFromCaffe(Config.FILE_PROTOTXT, Config.FILE_MODEL)
@@ -102,7 +97,7 @@ if __name__ == "__main__":
 
 			#Passing Blob through network to detect and predict
 			nn.setInput(blob)
-			detections = get_detected_object_list( nn.forward() )
+			detections = get_detected_object_list( nn.forward(), Config.MIN_CONFIDENCE )
 
 			
 			#Loop over the detections
@@ -110,11 +105,12 @@ if __name__ == "__main__":
 				print(detection,flush=True)
 				#Filtering out weak predictions
 				#if confidence > MIN_CONFIDENCE and idx == 15:
-				if not throttle_output(detection.label, detection.detection_time):
+				if not throttle_output(detection.label, detection.timestamp):
 						
-						# Publish the MQTT msg
-						client.publish( detection.getTopic(), str(detection) )
-						print(detection, flush=True)
+					# Publish the MQTT msg
+					client.publish( Config.MQTT_TOPIC + "/" + detection.label, str(detection) )
+					print(detection, flush=True)
+			del detections
 
 
 
