@@ -6,25 +6,7 @@ import numpy as np
 # import configuration
 from config import Config
 from paho_mqtt import *
-
-# Check throttling of the MQTT output for an object
-# detected object list with label->time accociation
-detected_objects = {}
-def throttle_output(object_label, obj_detection_time, throttle_time):
-    if object_label in detected_objects:
-        # check if time since last detection
-        # if less than THROTTLE_TIME, return true, we are throttling
-        # if greater than THROTTLE_TIME, return false, we are not throttling
-        if obj_detection_time - detected_objects[object_label] < throttle_time:
-            return True
-        else:
-            detected_objects[object_label] = obj_detection_time
-            return False
-    else:
-        # set time in dictionary for this object
-        # return false meaning we are not throttling for this object
-        detected_objects[object_label] = obj_detection_time
-        return False
+from throttle import *
 
 class detected_object:
 	labels = ["background", "aeroplane", "bicycle", "bird", 
