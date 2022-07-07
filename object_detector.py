@@ -1,3 +1,7 @@
+# object_detector.py
+
+import cv2
+
 class detected_object:
 	labels = ["background", "aeroplane", "bicycle", "bird", 
 	"boat","bottle", "bus", "car", "cat", "chair", "cow", 
