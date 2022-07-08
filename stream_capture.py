@@ -1,5 +1,6 @@
 # stream_capture.py
-import cv2
+
+import cv2, imutils
 
 class stream_capture:
 	def __init__(self, stream_url):
