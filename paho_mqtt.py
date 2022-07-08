@@ -16,7 +16,7 @@ class paho_mqtt:
 		if not self.throttle_output( topic, time.time() ):
 			self.client.publish( topic, msg )
 
-	def throttle_output( topic, timestamp ):
+	def throttle_output( self, topic, timestamp ):
 		if topic in self.throttle_list:
 			# check if time since last detection
 			# if less than THROTTLE_TIME, return true, we are throttling
