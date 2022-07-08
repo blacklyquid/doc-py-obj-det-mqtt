@@ -23,10 +23,6 @@ class object_detector:
 		self.nn = cv2.dnn.readNetFromCaffe(prototxt, model)
 	def get_detections( self, blob ):
 		self.nn.setInput( blob )
-		return self._get_detected_object_list()
-	# return list of detected objects from cv2 network
-	# return only objects with confidence levels above the min
-	def _get_detected_object_list():
 		nn_detections = self.nn.forward()
 		# detected object list to return
 		dol = []
