@@ -1,6 +1,6 @@
 # object_detector.py
 
-import cv2
+import cv2, time
 import numpy as np
 
 class detected_object:
