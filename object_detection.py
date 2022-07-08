@@ -1,6 +1,5 @@
-import cv2
+
 import time
-import imutils
 import numpy as np
 
 # import configuration
