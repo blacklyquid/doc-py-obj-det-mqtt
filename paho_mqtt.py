@@ -1,3 +1,6 @@
+# paho_mqtt.py
+
+import time
 import paho.mqtt.client as paho
 
 class paho_mqtt:
