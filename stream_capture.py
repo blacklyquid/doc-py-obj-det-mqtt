@@ -1,3 +1,6 @@
+# stream_capture.py
+import cv2
+
 class stream_capture:
 	def __init__(self, stream_url):
 		self.url = stream_url
