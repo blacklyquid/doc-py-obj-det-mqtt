@@ -1,6 +1,7 @@
 # object_detector.py
 
 import cv2
+import numpy as np
 
 class detected_object:
 	labels = ["background", "aeroplane", "bicycle", "bird", 
