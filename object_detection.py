@@ -1,5 +1,4 @@
-
-
+# object_detection.py
 
 # import configuration
 from config import Config
@@ -26,5 +25,3 @@ if __name__ == "__main__":
 		#Loop over the detections
 		for detection in detections:
 			mqtt.publish( Config.MQTT_TOPIC + "/" + detection.label, str(detection) )
-			print(detection, flush=True)
-		del detections
