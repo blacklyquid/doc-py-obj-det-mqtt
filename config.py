@@ -10,8 +10,8 @@ class config:
   MQTT_USER = os.environ.get('MQTT_USER', '')
   MQTT_PASSWORD = os.environ.get('MQTT_PASSWORD','')
 
-  # the base mqtt topic
-  MQTT_TOPIC = os.environ.get('MQTT_TOPIC','home/object-detected/')
+  # the base mqtt topic - no trailing /
+  MQTT_TOPIC = os.environ.get('MQTT_TOPIC','home/object-detected')
 
   # The stream we are detecting objects in
   STREAM_URL = os.environ.get('STREAM_URL',None)
