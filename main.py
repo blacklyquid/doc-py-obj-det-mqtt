@@ -1,4 +1,4 @@
-# object_detection.py
+# main.py
 
 # import configuration
 from config import Config
@@ -17,11 +17,7 @@ if __name__ == "__main__":
 	time.sleep(60.0)
 	print("Begining...",flush=True)
 
-	#Loop Video Stream
 	while True:
-		# Read frame and resize to 400px
 		detections = detector.get_detections( vs.get_blob() )
-
-		#Loop over the detections
 		for detection in detections:
 			mqtt.publish( Config.MQTT_TOPIC + "/" + detection.label, str(detection) )
