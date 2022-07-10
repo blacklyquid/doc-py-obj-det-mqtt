@@ -11,13 +11,18 @@ class paho_mqtt:
 		self.client.loop_start()
 		self.throttle_list = {}
 		self.throttle_time = throttle_time
-		
+	
+	# Publish MQTT message
 	def publish( self, topic, msg ):
-		if not self.throttle_output( topic, time.time() ):
+		if not self.throttle_output( topic ):
 			self.client.publish( topic, msg )
 			print(msg, flush=True)
-
-	def throttle_output( self, topic, timestamp ):
+	
+	# Throttle MQTT message output per topic
+	def throttle_output( self, topic ):
+		if self.throttle_time == 0:
+			return False
+		timestamp = time.time()
 		if topic in self.throttle_list:
 			# check if time since last detection
 			# if less than THROTTLE_TIME, return true, we are throttling
