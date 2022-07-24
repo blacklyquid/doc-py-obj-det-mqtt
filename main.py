@@ -16,7 +16,8 @@ if __name__ == "__main__":
 	print("Waiting 60 seconds to start ...",flush=True)
 	time.sleep(60.0)
 	print("Begining...",flush=True)
-
+	print("MQTT Topic Base " + Config.MQTT_TOPIC)
+	
 	while True:
 		detections = detector.get_detections( vs.get_blob() )
 		for detection in detections:
