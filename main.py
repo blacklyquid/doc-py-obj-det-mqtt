@@ -7,7 +7,7 @@ from object_detector import *
 from stream_capture import *
 
 if __name__ == "__main__":
-	
+	# MQTT client with throttle per topic
 	mqtt = paho_mqtt( Config.MQTT_CLIENT_ID, Config.MQTT_USER, Config.MQTT_PASSWORD, Config.MQTT_HOST, Config.MQTT_PORT, Config.THROTTLE_TIME)
 	detector = object_detector(Config.MIN_CONFIDENCE, Config.FILE_PROTOTXT, Config.FILE_MODEL)
 	vs = stream_capture(Config.STREAM_URL)
