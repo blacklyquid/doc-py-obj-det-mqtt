@@ -10,7 +10,7 @@ class stream_capture:
 		self.error_counter = 0
 		self.auto_reset = True
 		self.reset_timeout = 30
-		self.reset()
+		self.capture()
 	
 	def get_blob(self):
 		if self.read():
@@ -23,8 +23,7 @@ class stream_capture:
 	def read(self):
 		try:
 			ret, frame = self.stream.read()
-			if ret:
-				self.frame = frame
+			self.frame = frame
 		except:
 			print("Reseting...",flush=True)
 			if self.auto_reset == True:
@@ -33,12 +32,12 @@ class stream_capture:
 	
 	def reset(self):
 		self.release()
-		print("Waiting " + str(self.reset_timeout) + " Seconds...",flush=True)
-		time.sleep(self.reset_timeout)
-		print("Capturing Stream...",flush=True)
 		self.capture()
 		
 	def capture(self):
+		print("Waiting " + str(self.reset_timeout) + " Seconds...",flush=True)
+		time.sleep(self.reset_timeout)
+		print("Capturing Stream...",flush=True)
 		self.stream = cv2.VideoCapture(self.url)
 	
 	def release(self):
