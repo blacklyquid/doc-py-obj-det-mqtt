@@ -1,7 +1,7 @@
 # stream_capture.py
 # blacklyquid@outlook.com
 # 2022
-import cv2, imutils
+import cv2, imutils, time
 
 class stream_capture:
 	
