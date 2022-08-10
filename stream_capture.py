@@ -33,7 +33,7 @@ class stream_capture:
 	
 	def reset(self):
 		self.release()
-		print("Waiting " + str( self.reset_timeout + " Seconds...",flush=True)
+		print("Waiting " + str(self.reset_timeout) + " Seconds...",flush=True)
 		time.sleep(self.reset_timeout)
 		print("Capturing Stream...",flush=True)
 		self.capture()
