@@ -6,9 +6,10 @@ class stream_capture:
 	
 	def __init__(self, stream_url):
 		self.url = stream_url
-		self.capture()
 		self.error_counter = 0
 		self.auto_reset = True
+		self.reset_timeout = 30
+		self.reset()
 	
 	def get_blob(self):
 		if self.read():
@@ -24,12 +25,16 @@ class stream_capture:
 			if ret:
 				self.frame = frame
 		except:
+			print("Reseting...",flush=True)
 			if self.auto_reset == True:
 				self.error_counter += 1
 				self.reset()
 	
 	def reset(self):
 		self.release()
+		print("Waiting " + str( self.reset_timeout + " Seconds...",flush=True)
+		time.sleep(self.reset_timeout)
+		print("Capturing Stream...",flush=True)
 		self.capture()
 		
 	def capture(self):
