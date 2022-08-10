@@ -23,7 +23,7 @@ class stream_capture:
 	def read(self):
 		try:
 			ret, frame = self.stream.read()
-			self.frame = frame
+			self.frame = frame.copy()
 		except:
 			print("Reseting...",flush=True)
 			if self.auto_reset == True:
