@@ -42,7 +42,8 @@ class stream_capture:
 		self.stream = cv2.VideoCapture(self.url)
 	
 	def release(self):
-		self.stream.release()
+		if self.stream:
+			self.stream.release()
 	
 	def __del__(self):
 		self.release()
