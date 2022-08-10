@@ -16,9 +16,9 @@ if __name__ == "__main__":
 		pass
 	
 	# sleeping might reset connection on camera
-	print("Waiting 60 seconds to start ...",flush=True)
+	#print("Waiting 60 seconds to start ...",flush=True)
 	time.sleep(60.0)
-	print("Begining...",flush=True)
+	#print("Begining...",flush=True)
 	print("MQTT Topic Base " + Config.MQTT_TOPIC)
 	
 	while True:
