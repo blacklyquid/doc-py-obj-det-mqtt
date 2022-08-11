@@ -9,7 +9,7 @@ class stream_capture:
 		self.url = stream_url
 		self.error_counter = 0
 		self.auto_reset = True
-		self.reset_timeout = 30
+		self.reset_timeout = 0
 		self.capture()
 	
 	def get_blob(self):
