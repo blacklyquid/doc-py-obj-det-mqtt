@@ -2,7 +2,7 @@ FROM python:3
 
 WORKDIR /usr/src/app
 
-RUN apt-get update && apt-get install libgl1 -y
+RUN apt-get update && apt-get install libgl1 ffmpeg -y
 
 COPY requirements.txt ./
 
