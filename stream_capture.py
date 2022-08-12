@@ -27,6 +27,7 @@ class stream_capture:
 	
 	def read(self):
 		ret, frame = self.stream.read()
+		print(ret, flush=True)
 		return frame
 	
 	def reset(self):
