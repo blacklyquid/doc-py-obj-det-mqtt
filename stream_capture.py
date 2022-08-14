@@ -2,6 +2,10 @@
 # blacklyquid@outlook.com
 # 2022
 import cv2, imutils, time
+def print_e(e):
+	for k in dir(e):
+		if k[0:2] != "__":
+			print("e.%s = %s" % (k, getattr(e, k)))
 
 class stream_capture:
 	
@@ -18,16 +22,19 @@ class stream_capture:
 		#ret, frame = self.stream.read()
 		#frame = imutils.resize(self.frame, width=400)
 		frame = cv2.resize(self.read(), (300, 300))
-		print(cv2.error, flush=True)
+		#print(cv2.error, flush=True)
+		print_e(cv2.error)
 
 			
 		blob = cv2.dnn.blobFromImage(frame, 0.007843, (300, 300), 127.5)
-		print(cv2.error, flush=True)
+		#print(cv2.error, flush=True)
+		print_e(cv2.error)
 		return blob
 	
 	def read(self):
 		ret, frame = self.stream.read()
-		print(cv2.error, flush=True)
+		#print(cv2.error, flush=True)
+		print_e(cv2.error)
 		return frame
 	
 	def reset(self):
