@@ -18,16 +18,16 @@ class stream_capture:
 		#ret, frame = self.stream.read()
 		#frame = imutils.resize(self.frame, width=400)
 		frame = cv2.resize(self.read(), (300, 300))
-		print(cv2.error, Flush=True)
+		print(cv2.error, flush=True)
 
 			
 		blob = cv2.dnn.blobFromImage(frame, 0.007843, (300, 300), 127.5)
-		print(cv2.error, Flush=True)
+		print(cv2.error, flush=True)
 		return blob
 	
 	def read(self):
 		ret, frame = self.stream.read()
-		print(cv2.error, Flush=True)
+		print(cv2.error, flush=True)
 		return frame
 	
 	def reset(self):
