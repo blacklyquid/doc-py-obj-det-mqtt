@@ -17,7 +17,13 @@ class stream_capture:
 		
 		#ret, frame = self.stream.read()
 		#frame = imutils.resize(self.frame, width=400)
-		blob = cv2.dnn.blobFromImage(cv2.resize(self.read(), (300, 300)), 0.007843, (300, 300), 127.5)
+		try:
+			frame = cv2.resize(self.read(), (300, 300))
+		except cv2.error as e:
+			# inspect error object
+			print(e)
+			
+		blob = cv2.dnn.blobFromImage(frame, 0.007843, (300, 300), 127.5)
 
 		return blob
 	
